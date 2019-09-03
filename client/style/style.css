@@ -1,0 +1,124 @@
+/* stretch goal - add items to carousel if screen is wide enough 
+   stretch goal - add ... after name is certain amout of characters
+*/
+
+/* .carouselTitleContainer {
+  display: flex;
+  flex-direction: row;
+} */
+
+.carouselTitle {
+  color: #CC6600;
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 16px;
+  margin: 0 0 20px 10px;
+  width: 60%;
+  float: left;
+}
+
+#carouselPgCount {
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  text-align: right;
+  width: 20%;
+  float: right;
+  margin: 10px 15px 10px 0;
+}
+
+.carouselContainer {
+  display: flex;
+  flex-direction: row;
+  height: 255px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.carouselScrollButtonContainerL {
+  width: 40px;
+  height: 255px;
+  display: flex;
+  padding: 0 0 0 10px;
+}
+
+.carouselScrollButtonContainerR {
+  width: 40px;
+  height: 255px;
+  display: flex;
+  padding: 0 10px 0 0;
+}
+
+.carouselScrollButton {
+  margin: auto;
+  padding: 2px;
+  width: 36px;
+  height: auto;
+  display: block;
+  cursor: pointer;
+}
+
+.carouselArrowGlow {
+  margin: auto;
+  width: 36px;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  border: 1px solid #FF5000;
+  box-shadow: 0px 0px 5px 1px #CC6600;
+  cursor: pointer;
+}
+
+.carouselItemBox {
+  height: 255px;
+  min-width: 160px;
+  max-width: 160px;
+}
+
+.carouselPics {
+  object-fit: scale-down;
+  height: 160px;
+  max-width: 160px;
+  width: auto;
+  display: block;
+  margin: 0 auto 0 auto;
+  cursor: pointer;
+}
+
+.carouselPrice {
+  color: #B12704;
+  margin: 5px 0 5px 0;
+  cursor: pointer;
+}
+
+.carouselName {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 13px;
+  color: #0066C0;
+  margin: 5px 0 5px 0;
+  cursor: pointer;
+}
+
+.carouselName:hover {
+  color: #CC6600;
+  text-decoration: underline;
+}
+
+.carouselRating {
+  font-family: verdana,arial,helvetica,sans-serif;
+  font-size: 13px;
+  color: #0066C0;
+  margin: 0 18px 0 0;
+  cursor: pointer;
+  text-align: right;
+  width: 10%;
+  float: right;
+}
+
+.carouselRating:hover {
+  color: #CC6600;
+}
+
+.carouselStar {
+  color: #FFCE00;
+  margin: 0 5px 0 0;
+  cursor: pointer;
+}
