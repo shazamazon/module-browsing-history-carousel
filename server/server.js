@@ -1,54 +1,65 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const { carouselItem } = require('../database/mongoose.js');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const { user, item } = require('../database/database');
 const app = express();
-const port = 4444;
+const port = 4445;
 
 
 app.use(express.static('client'));
 app.use(bodyParser.json());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-app.post('/item', (req, res) => {
-  const item = new carouselItem({
-    _id: new mongoose.Types.ObjectId(),
-    ProductId: req.body.ProductId,
-    ItemName: req.body.ItemName,
-    Price: req.body.Price,
-    Rating: req.body.Rating,
-    RatingCount: Math.floor(Math.random() * 20) + 1,
-    Category: req.body.Category,
-    Photo: req.body.Photo[0],
-  });
-  item.save()
-    .then(result => {
-      res.status(201).send({
-        message: 'handling POST requests to /item',
-        createdProduct: result
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send({ error: err });
-    });
-});
 
 app.get('/item', (req, res) => {
-  carouselItem.find(req.query.Category !== undefined ? { Category: req.query.Category } : { ProductId: req.query.ProductId } )
+  item.find({ ProductId: Number(req.query.ProductId) })
     .exec()
-    .then(doc => {
-      console.log('get request successful');
-      res.status(200).send(doc);
+    .then(itemObj => {
+      res.status(200).send(itemObj);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
+});
+
+app.get('/user', (req, res) => {
+  user.find({_id: req.query._id})
+    .exec()
+    .then(data => {
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
+});
+
+app.post('/user', (req, res) => {
+  const entry = new user({
+    _id: new mongoose.Types.ObjectId(),
+    AllProductIds: req.body.AllProductIds,
+    itemsViewed: [req.body.itemsViewed],
+  });
+  entry.save()
+    .then(result => {
+      res.status(201).send(result._id);
     })
     .catch(err => {
       console.error(err);
       res.status(500).send({ error: err });
     });
 });
+
+app.put('/updateUser', (req, res) => {
+  user.updateOne({ _id: req.body._id }, { itemsViewed: req.body.itemsViewed, AllProductIds: req.body.AllProductIds})
+    .exec()
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+});
+
+
 
 app.listen(port, () => { console.log(`we are listening from port ${port}`); });

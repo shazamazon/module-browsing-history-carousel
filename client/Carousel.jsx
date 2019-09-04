@@ -7,7 +7,9 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      globalCategory: '',
+      mainItemData: {},
+      cookieId: null,
+      browserHistory: {},
       itemData: [],
       indexOnScreen: 0,
       itemsRendered: [],
@@ -31,11 +33,62 @@ class Carousel extends Component {
   ///////////////////////////////////////////////////////////////////////////////*/
 
   componentDidMount() {
-    this.getLoading(null, this.getCategory.bind(this));
     window.addEventListener('resize', this.getWidth);
+    this.getItem();
   }
 
-  getLoading(event, func) {
+  getItem () {
+    axios.get('/item', {
+      params: {
+        ProductId: Math.floor(Math.random() * 105) + 1 // get global item
+      }
+    })
+      .then(({ data }) => {
+        this.setState({ mainItemData: data[0] }, () => {
+          this.checkCookies();
+        });
+      })
+      .catch (err => {
+        console.error(err);
+      });
+  }
+
+  checkCookies() {
+    if (this.state.cookieId !== null) {
+      this.getLoading();
+      return;
+    }
+
+    let cookieSplit = document.cookie.split('=');
+    if (document.cookie !== '') {
+      this.setState({ cookieId: cookieSplit[1] }, () => {
+        this.getLoading();
+      });
+    } else {
+      this.setCookie();
+    }
+  }
+  //if cookie, get user data, add current data, and post new user data
+
+  setCookie () {
+    axios.post('/user', {
+      AllProductIds: [this.state.mainItemData.ProductId],
+      itemsViewed: {
+        ItemName: this.state.mainItemData.ItemName,
+        Photo: this.state.mainItemData.Photo,
+        ProductId: this.state.mainItemData.ProductId
+      }
+    })
+      .then(({data}) => {
+        this.setState({cookieId: data});
+        document.cookie = `_id=${data}`;
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  getLoading() {
     //Will pass other functions through for left/right click load
     let count = Math.floor((window.innerWidth + 50) / 240);
     let result = [];
@@ -45,37 +98,46 @@ class Carousel extends Component {
     }
 
     this.setState({ itemData: [], itemsRendered: result }, () => {
-      func();
+      this.getHistory();
     });
   }
 
-  getCategory() {
-    axios.get('http://18.191.49.198/item', {
+  getHistory() {
+    axios.get('/user', { 
       params: {
-        ProductId: 5 //replace with global ID ////////////////////////////////
+        _id: this.state.cookieId
       }
     })
       .then(data => {
-        setTimeout(() =>
-          this.setState({ globalCategory: data.data[0].Category }, () => {
-            this.getAllFromCategory(event, this.state.globalCategory);
-          }), 200);
+        this.setState({ itemData: data.data[0].itemsViewed, browserHistory: data.data[0] }, () => {
+          this.updateUser();
+        });
       })
       .catch(err => {
         console.error(err);
       });
   }
 
-  getAllFromCategory(event, category) {
-    axios.get('http://18.191.49.198/item', { 
-      params: {
-        Category: category
-      }
+  updateUser() {
+    let history = this.state.browserHistory.itemsViewed;
+    let updatedIds = this.state.browserHistory.AllProductIds;
+    if (updatedIds.indexOf(this.state.mainItemData.ProductId) === -1) {
+      updatedIds.unshift(this.state.mainItemData.ProductId);
+      history.unshift(this.state.mainItemData);
+    } else {
+      history.splice(updatedIds.indexOf(this.state.mainItemData.ProductId), 1);
+      history.unshift(this.state.mainItemData);
+      updatedIds.splice(updatedIds.indexOf(this.state.mainItemData.ProductId), 1);
+      updatedIds.unshift(this.state.mainItemData.ProductId);
+    }
+    axios.put('/updateUser', {
+      _id: this.state.cookieId,
+      itemsViewed: history,
+      AllProductIds: updatedIds
     })
-      .then(data => {
-        this.setState({ itemData: data.data}, () => {
-          this.getWidth();
-        });
+      .then(() => {
+        console.log('post successful');
+        this.getWidth();
       })
       .catch(err => {
         console.error(err);
@@ -237,7 +299,7 @@ class Carousel extends Component {
     return (
       <div>
         <div id="carouselTitleContainer"> 
-          <h2 className="carouselTitle">Sponsored products related to this item</h2>
+          <h2 className="carouselTitle">Your Browsing History</h2>
           <p id="carouselPgCount">Page {this.state.indexOnScreen + 1} of {this.state.itemData.length}</p>
         </div>
         <div className="carouselContainer">
