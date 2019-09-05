@@ -38,7 +38,7 @@ class Carousel extends Component {
   }
 
   getItem () {
-    axios.get('http://18.191.11.52/item', {
+    axios.get('http://18.191.11.52:4445/item', {
       params: {
         ProductId: Math.floor(Math.random() * 105) + 1 // get global item
       }
@@ -71,7 +71,7 @@ class Carousel extends Component {
   //if cookie, get user data, add current data, and post new user data
 
   setCookie () {
-    axios.post('http://18.191.11.52/user', {
+    axios.post('http://18.191.11.52:4445/user', {
       AllProductIds: [this.state.mainItemData.ProductId],
       itemsViewed: {
         ItemName: this.state.mainItemData.ItemName,
@@ -103,7 +103,7 @@ class Carousel extends Component {
   }
 
   getHistory() {
-    axios.get('http://18.191.11.52/user', { 
+    axios.get('http://18.191.11.52:4445/user', { 
       params: {
         _id: this.state.cookieId
       }
@@ -130,7 +130,7 @@ class Carousel extends Component {
       updatedIds.splice(updatedIds.indexOf(this.state.mainItemData.ProductId), 1);
       updatedIds.unshift(this.state.mainItemData.ProductId);
     }
-    axios.put('http://18.191.11.52/updateUser', {
+    axios.put('http://18.191.11.52:4445/updateUser', {
       _id: this.state.cookieId,
       itemsViewed: history,
       AllProductIds: updatedIds
