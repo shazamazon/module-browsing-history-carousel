@@ -25,24 +25,24 @@
   margin: 10px 15px 10px 0;
 }
 
-.carouselContainer {
+.browsingCarouselContainer {
   display: flex;
   flex-direction: row;
-  height: 255px;
+  height: 100px;
   width: 100%;
   justify-content: space-between;
 }
 
-.carouselScrollButtonContainerL {
+.browsingCarouselScrollButtonContainerL {
   width: 40px;
-  height: 255px;
+  height: 100px;
   display: flex;
   padding: 0 0 0 10px;
 }
 
-.carouselScrollButtonContainerR {
+.browsingCarouselScrollButtonContainerR {
   width: 40px;
-  height: 255px;
+  height: 100px;
   display: flex;
   padding: 0 10px 0 0;
 }
@@ -67,25 +67,19 @@
   cursor: pointer;
 }
 
-.carouselItemBox {
-  height: 255px;
-  min-width: 160px;
-  max-width: 160px;
+.browsingCarouselItemBox {
+  height: 100px;
+  min-width: 100px;
+  max-width: 100px;
 }
 
-.carouselPics {
+.browsingCarouselPics {
   object-fit: scale-down;
-  height: 160px;
-  max-width: 160px;
+  height: 100px;
+  max-width: 100px;
   width: auto;
   display: block;
   margin: 0 auto 0 auto;
-  cursor: pointer;
-}
-
-.carouselPrice {
-  color: #B12704;
-  margin: 5px 0 5px 0;
   cursor: pointer;
 }
 
@@ -94,31 +88,5 @@
   font-size: 13px;
   color: #0066C0;
   margin: 5px 0 5px 0;
-  cursor: pointer;
-}
-
-.carouselName:hover {
-  color: #CC6600;
-  text-decoration: underline;
-}
-
-.carouselRating {
-  font-family: verdana,arial,helvetica,sans-serif;
-  font-size: 13px;
-  color: #0066C0;
-  margin: 0 18px 0 0;
-  cursor: pointer;
-  text-align: right;
-  width: 10%;
-  float: right;
-}
-
-.carouselRating:hover {
-  color: #CC6600;
-}
-
-.carouselStar {
-  color: #FFCE00;
-  margin: 0 5px 0 0;
   cursor: pointer;
 }
