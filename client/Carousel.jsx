@@ -7,7 +7,7 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      globalId: 66,
+      globalId: 38,
       mainItemData: {},
       cookieId: null,
       browserHistory: {},

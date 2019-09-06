@@ -12,7 +12,8 @@
     "start": "nodemon server/server.js --open",
     "live": "pm2 start server/server.js",
     "save": "pm2 save",
-    "mongo": "mongod --config /usr/local/etc/mongod.conf"
+    "mongo": "mongod --config /usr/local/etc/mongod.conf",
+    "ec2": "ssh -i ~/.ssh/FEC.pem ubuntu@ec2-18-191-11-52.us-east-2.compute.amazonaws.com"
   },
   "dependencies": {
     "axios": "^0.19.0",
