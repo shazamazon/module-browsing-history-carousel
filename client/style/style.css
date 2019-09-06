@@ -6,6 +6,9 @@
   display: flex;
   flex-direction: row;
 } */
+#Browsing-History-Carousel {
+  margin-bottom: 30px;
+}
 
 .carouselTitle {
   color: #CC6600;
