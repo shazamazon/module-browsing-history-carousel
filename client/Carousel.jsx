@@ -7,6 +7,7 @@ class Carousel extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      globalId: 66,
       mainItemData: {},
       cookieId: null,
       browserHistory: {},
@@ -34,13 +35,20 @@ class Carousel extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this.getWidth);
+    window.addEventListener('clickedProduct', this.setGlobalId.bind(this));
     this.getItem();
+  }
+
+  setGlobalId (event) {
+    this.setState({ globalId: event.detail, numOfItemsOnScreen: 0, itemData: [], indexOnScreen: 0, itemsRendered: [] }, () => {
+      this.getItem();
+    });
   }
 
   getItem () {
     axios.get('http://18.191.11.52/item', {
       params: {
-        ProductId: Math.floor(Math.random() * 105) + 1 // get global item
+        ProductId: this.state.globalId // get global item
       }
     })
       .then(({ data }) => {
@@ -58,17 +66,18 @@ class Carousel extends Component {
       this.getLoading();
       return;
     }
+    let cookieSplit = document.cookie.split(';');
+    let keyPairSplit = cookieSplit[0].split('=');
+    console.log(keyPairSplit[1]);
 
-    let cookieSplit = document.cookie.split('=');
     if (document.cookie !== '') {
-      this.setState({ cookieId: cookieSplit[1] }, () => {
+      this.setState({ cookieId: keyPairSplit[1] }, () => {
         this.getLoading();
       });
     } else {
       this.setCookie();
     }
   }
-  //if cookie, get user data, add current data, and post new user data
 
   setCookie () {
     axios.post('http://18.191.11.52/user', {
@@ -80,8 +89,12 @@ class Carousel extends Component {
       }
     })
       .then(({data}) => {
+        let today = new Date();
+        today.setMonth(today.getMonth() + 1);
+
         this.setState({cookieId: data});
-        document.cookie = `_id=${data}`;
+        document.cookie = `_id=${data}; expires=${today.toUTCString()}`;
+        this.getLoading();
       })
       .catch(err => {
         console.error(err);
@@ -89,7 +102,6 @@ class Carousel extends Component {
   }
 
   getLoading() {
-    //Will pass other functions through for left/right click load
     let count = Math.floor((window.innerWidth + 50) / 240);
     let result = [];
 
@@ -145,7 +157,7 @@ class Carousel extends Component {
   }
 
   getWidth() {
-    let count = Math.floor((window.innerWidth + 50) / 240);
+    let count = Math.floor((window.innerWidth + 50) / 180);
     if (count !== this.state.numOfItemsOnScreen) {
       this.setState({ numOfItemsOnScreen: count }, () => this.createDataMatrix());
     }
@@ -291,8 +303,12 @@ class Carousel extends Component {
   /* ////////////////////////////// Global Functions ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////*/
 
-  setGlobal(event, id) {
-    console.log(`set global productId to: ${id}`);
+  setGlobal(e, id) {
+    const event = new CustomEvent('clickedProduct', { detail: id });
+    window.dispatchEvent(event);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 70);
   }
 
   render() {
@@ -302,8 +318,8 @@ class Carousel extends Component {
           <h2 className="carouselTitle">Your Browsing History</h2>
           <p id="carouselPgCount">Page {this.state.indexOnScreen + 1} of {this.state.itemData.length}</p>
         </div>
-        <div className="carouselContainer">
-          <div className="carouselScrollButtonContainerL">
+        <div className="browsingCarouselContainer">
+          <div className="browsingCarouselScrollButtonContainerL">
             <img className={this.state.clickStateLeft}
               onMouseEnter={() => this.setState({ hoverStateLeft: this.state.arrows.leftHover })}
               onMouseLeave={() => this.setState({ hoverStateLeft: this.state.arrows.leftUnclicked })}
@@ -329,7 +345,7 @@ class Carousel extends Component {
               );
             }
           })}
-          <div className="carouselScrollButtonContainerR">
+          <div className="browsingCarouselScrollButtonContainerR">
             <img className={this.state.clickStateRight}
               onMouseEnter={() => this.setState({ hoverStateRight: this.state.arrows.rightHover })}
               onMouseLeave={() => this.setState({ hoverStateRight: this.state.arrows.rightUnclicked })}
