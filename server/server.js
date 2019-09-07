@@ -22,7 +22,6 @@ app.get('/item', (req, res) => {
       res.status(200).send(itemObj);
     })
     .catch(err => {
-      console.error(err);
       res.status(500).end();
     });
 });
@@ -34,7 +33,6 @@ app.get('/user', (req, res) => {
       res.status(200).send(data);
     })
     .catch(err => {
-      console.error(err);
       res.status(500).end();
     });
 });
@@ -50,8 +48,7 @@ app.post('/user', (req, res) => {
       res.status(201).send(result._id);
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).send({ error: err });
+      res.status(500).end();
     });
 });
 
@@ -61,9 +58,7 @@ app.put('/updateUser', (req, res) => {
     .then(() => {
       res.status(200).end();
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch();
 });
 
 

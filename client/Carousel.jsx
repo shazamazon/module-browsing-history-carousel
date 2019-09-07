@@ -56,9 +56,7 @@ class Carousel extends Component {
           this.checkCookies();
         });
       })
-      .catch (err => {
-        console.error(err);
-      });
+      .catch ();
   }
 
   checkCookies() {
@@ -68,7 +66,6 @@ class Carousel extends Component {
     }
     let cookieSplit = document.cookie.split(';');
     let keyPairSplit = cookieSplit[0].split('=');
-    console.log(keyPairSplit[1]);
 
     if (document.cookie !== '') {
       this.setState({ cookieId: keyPairSplit[1] }, () => {
@@ -96,9 +93,7 @@ class Carousel extends Component {
         document.cookie = `_id=${data}; expires=${today.toUTCString()}`;
         this.getLoading();
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch();
   }
 
   getLoading() {
@@ -125,9 +120,7 @@ class Carousel extends Component {
           this.updateUser();
         });
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch();
   }
 
   updateUser() {
@@ -148,12 +141,9 @@ class Carousel extends Component {
       AllProductIds: updatedIds
     })
       .then(() => {
-        console.log('post successful');
         this.getWidth();
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch();
   }
 
   getWidth() {
