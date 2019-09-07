@@ -9,7 +9,7 @@ const InfoBox = (props) => {
   } else {
     return (
       <div className="browsingCarouselItemBox">
-        <img className="browsingCarouselPics" onClick={() => props.setGlobal(event, props.item.ProductId)} src={props.item.Photo}></img>
+        <img title={props.item.ItemName} className="browsingCarouselPics" onClick={() => props.setGlobal(event, props.item.ProductId)} src={props.item.Photo}></img>
       </div>
     );
   }
