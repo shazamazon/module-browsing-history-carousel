@@ -16,7 +16,7 @@
     "ec2": "ssh -i ~/.ssh/FEC.pem ubuntu@ec2-18-191-11-52.us-east-2.compute.amazonaws.com"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongoose": "^5.6.12",
